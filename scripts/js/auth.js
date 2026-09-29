@@ -62,7 +62,7 @@ if (authForm) {
     // Safely check if the Org Name field exists on this specific form
     const orgNameInput = document.getElementById('orgName');
     const orgName = orgNameInput && orgNameInput.value ? orgNameInput.value : "Independent Organizer";
-    const isSignUp = !!orgNameInput; 
+    const isSignUp = document.getElementById('authMode').value === 'signup';
 
     try {
       if (isSignUp) {
