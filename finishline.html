@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech - Track Judge & Photo Finish</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/mobile-field.css">
+</head>
+<body>
+  <header class="field-header">
+    <div>
+      <h2 id="eventTitle">100m Senior Boys - Final</h2>
+      <p id="eventMeta" class="text-muted">Finish Line Authority | Camera Enabled</p>
+    </div>
+    <div class="connection-status" id="networkStatus">Online</div>
+  </header>
+
+  <main class="container">
+    <!-- Viewfinder -->
+    <section class="video-container">
+      <video id="cameraFeed" autoplay playsinline muted></video>
+      <div id="finishLineOverlay"></div>
+    </section>
+
+    <!-- Camera Controls -->
+    <section class="controls-bar">
+      <button class="btn btn-danger" id="btnStartCapture" style="flex: 1;">
+        🔴 Hold to Capture Finish (60fps)
+      </button>
+      <button class="btn btn-primary hidden" id="btnReviewFrames" style="flex: 1;">
+        🔍 Run AI Torso Tracking
+      </button>
+    </section>
+
+    <!-- Ranking Validation Table -->
+    <section class="athlete-list hidden" id="resultsValidationContainer">
+      <h3 style="margin-bottom: 0.5rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem;">Suggested Ranking (Verify Required)</h3>
+      <div id="rankingList">
+        <!-- Athletes injected dynamically via photofinish.js -->
+      </div>
+      <button class="btn btn-primary" id="btnPublishResults" style="width: 100%; margin-top: 1rem;">
+        ✅ Confirm & Publish to Medal Table
+      </button>
+    </section>
+  </main>
+
+  <script type="module" src="js/photofinish.js"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech | Powered by The AMBASSADOR'S SPORTS CONSULTS</title>
+  
+  <!-- Tailwind CSS via CDN for instant, premium styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Tailwind Configuration to match your brand colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sportNavy: '#0f172a',
+            sportDark: '#1e293b',
+            sportGreen: '#10b981',
+            sportAmber: '#f59e0b',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-sportNavy text-white font-sans antialiased overflow-x-hidden">
+
+  <!-- Navigation -->
+  <nav class="fixed w-full z-50 top-0 transition-all duration-300 bg-sportNavy/80 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sportGreen to-emerald-700 flex items-center justify-center font-bold text-xl">S</div>
+        <span class="text-xl font-bold tracking-tight">SportTech</span>
+      </div>
+      <div class="hidden md:flex gap-6 text-sm font-medium text-slate-300">
+        <a href="#features" class="hover:text-sportGreen transition-colors">Features</a>
+        <a href="#how-it-works" class="hover:text-sportGreen transition-colors">For Organizers</a>
+      </div>
+      <div>
+        <button onclick="toggleAuthModal('login')" class="text-sm font-semibold text-slate-300 hover:text-white mr-4">Log In</button>
+        <button onclick="toggleAuthModal('signup')" class="bg-sportGreen hover:bg-emerald-500 text-sportNavy text-sm font-bold py-2 px-5 rounded-full transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]">
+          Host an Event
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
+    <!-- Background Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-sportGreen/20 rounded-full blur-[120px] -z-10"></div>
+    
+    <div class="max-w-4xl mx-auto text-center z-10 relative">
+      <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-sportGreen/30 bg-sportGreen/10 text-sportGreen text-xs font-semibold uppercase tracking-wider">
+        By The AMBASSADOR'S SPORTS CONSULTS
+      </div>
+      <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+        Digitize the track. <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sportGreen to-emerald-300">Eliminate the chaos.</span>
+      </h1>
+      <p class="text-lg lg:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+        Transform grassroots athletics into high-value marketing platforms. From AI-powered Call Room check-ins to automated, real-time medal tables, SportTech bridges the gap in professional sports administration.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="toggleAuthModal('signup')" class="bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold text-lg py-4 px-8 rounded-full transition-transform hover:-translate-y-1 shadow-lg">
+          Start Your First Event (Free)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auth Modal (Sign Up / Log In) -->
+  <div id="authModal" class="fixed inset-0 z-[100] hidden flex justify-center items-center px-4">
+    <div class="absolute inset-0 bg-sportNavy/90 backdrop-blur-sm" onclick="toggleAuthModal()"></div>
+    
+    <div class="relative bg-sportDark border border-white/10 rounded-2xl w-full max-w-md p-8 shadow-2xl transform transition-all">
+      <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      
+      <div class="text-center mb-8">
+        <h2 id="modalTitle" class="text-2xl font-bold mb-2">Create Organizer Account</h2>
+        <p id="modalSubtitle" class="text-slate-400 text-sm">Join the new standard of technical officiating.</p>
+      </div>
+
+            <form id="authForm" class="space-y-4">
+        <div id="orgFieldGroup">
+          <label class="block text-xs font-medium text-slate-400 mb-1">Organization / School Name</label>
+          <input type="text" id="orgName" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="e.g., NUESA UNILAG">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Work Email</label>
+          <input type="email" id="email" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="director@example.com">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
+          <input type="password" id="password" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="••••••••">
+        </div>
+
+        <button type="submit" id="btnSubmitAuth" class="w-full bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold py-3 rounded-lg transition-colors mt-2">
+          Create Account
+        </button>
+
+        <!-- Divider -->
+        <div class="relative my-4">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-700"></div></div>
+          <div class="relative flex justify-center text-sm"><span class="px-2 bg-sportDark text-slate-400">Or continue with</span></div>
+        </div>
+
+        <!-- Alternative Providers -->
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" id="btnGoogleAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:border-sportGreen text-white font-semibold py-2.5 rounded-lg transition-all">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+            Google
+          </button>
+          <button type="button" id="btnPhoneAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:border-sportGreen text-white font-semibold py-2.5 rounded-lg transition-all">
+            📞 Phone
+          </button>
+        </div>
+
+        <!-- Invisible reCAPTCHA container required by Firebase for Phone Auth -->
+        <div id="recaptcha-container" class="mt-2 flex justify-center"></div>
+      </form>
+
+      
+      <p class="text-center text-sm text-slate-400 mt-6" id="authSwitchText">
+        Already have an account? <button onclick="toggleAuthModal('login')" class="text-sportGreen font-semibold hover:underline">Log in</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- UI Logic for Modal -->
+  <script>
+    let isSignUp = true;
+    const modal = document.getElementById('authModal');
+    const orgFieldGroup = document.getElementById('orgFieldGroup');
+    const modalTitle = document.getElementById('modalTitle');
+    const btnSubmitAuth = document.getElementById('btnSubmitAuth');
+    const authSwitchText = document.getElementById('authSwitchText');
+
+    function toggleAuthModal(mode = null) {
+      if (mode === 'login') {
+        isSignUp = false;
+        orgFieldGroup.classList.add('hidden');
+        modalTitle.innerText = 'Welcome Back';
+        btnSubmitAuth.innerText = 'Log In';
+        authSwitchText.innerHTML = `Need an account? <button onclick="toggleAuthModal('signup')" class="text-sportGreen font-semibold hover:underline">Sign up</button>`;
+      } else if (mode === 'signup') {
+        isSignUp = true;
+        orgFieldGroup.classList.remove('hidden');
+        modalTitle.innerText = 'Create Organizer Account';
+        btnSubmitAuth.innerText = 'Create Account';
+        authSwitchText.innerHTML = `Already have an account? <button onclick="toggleAuthModal('login')" class="text-sportGreen font-semibold hover:underline">Log in</button>`;
+      }
+      modal.classList.toggle('hidden');
+    }
+  </script>
+
+  <!-- Auth Controller Script Connection -->
+  <script type="module" src="./scripts/js/auth.js"></script>
+</body>
+</html>

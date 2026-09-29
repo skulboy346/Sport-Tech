@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech | Organizer Dashboard</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sportNavy: '#0f172a',
+            sportDark: '#1e293b',
+            sportGreen: '#10b981',
+            sportAmber: '#f59e0b',
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'], }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-sportNavy text-white font-sans antialiased overflow-x-hidden flex h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-sportDark border-r border-white/10 hidden md:flex flex-col">
+    <div class="p-6 border-b border-white/10 flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sportGreen to-emerald-700 flex items-center justify-center font-bold text-xl">S</div>
+      <span class="text-xl font-bold tracking-tight">SportTech</span>
+    </div>
+    <nav class="flex-1 p-4 space-y-2">
+      <a href="#" class="block px-4 py-3 rounded-lg bg-sportNavy text-white font-medium border border-white/5">🏆 My Tournaments</a>
+      <a href="#" class="block px-4 py-3 rounded-lg text-slate-400 hover:bg-sportNavy hover:text-white transition-colors">⚙️ Account Settings</a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <button id="btnSignOut" class="w-full text-left px-4 py-2 text-slate-400 hover:text-sportAmber transition-colors">Log Out</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col h-full overflow-hidden">
+    <!-- Mobile Header -->
+    <header class="md:hidden bg-sportDark border-b border-white/10 p-4 flex justify-between items-center">
+      <span class="text-lg font-bold">SportTech</span>
+      <button id="btnMobileSignOut" class="text-sm text-slate-400">Log Out</button>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10">
+      <div class="max-w-5xl mx-auto">
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+          <div>
+            <h1 class="text-3xl font-bold mb-1" id="organizerNameDisplay">Loading...</h1>
+            <p class="text-slate-400">Manage your active sports competitions</p>
+          </div>
+          <button onclick="toggleTournamentModal()" class="bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold py-3 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            + New Tournament
+          </button>
+        </header>
+
+        <!-- Tournaments Grid -->
+        <div id="tournamentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Create Tournament Modal -->
+  <div id="tournamentModal" class="fixed inset-0 z-[100] hidden flex justify-center items-center px-4">
+    <div class="absolute inset-0 bg-sportNavy/90 backdrop-blur-sm" onclick="toggleTournamentModal()"></div>
+    
+    <div class="relative bg-sportDark border border-white/10 rounded-2xl w-full max-w-lg p-8 shadow-2xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Configure Tournament</h2>
+        <button onclick="toggleTournamentModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+      </div>
+
+      <form id="tournamentForm" class="space-y-5">
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Tournament Name</label>
+          <input type="text" id="tournName" required class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="e.g., Dean's Cup 2026">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Public URL Slug</label>
+          <div class="flex items-center">
+            <span class="bg-sportNavy border border-r-0 border-white/10 rounded-l-lg px-3 py-3 text-slate-500 text-sm">sporttech.app/</span>
+            <input type="text" id="tournSlug" required class="flex-1 bg-sportNavy border border-white/10 rounded-r-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="deans-cup-26">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Participating Houses/Teams (Comma separated)</label>
+          <textarea id="tournTeams" required rows="3" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="Red House, Blue House, Green House"></textarea>
+        </div>
+
+        <button type="submit" id="btnSaveTournament" class="w-full bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold py-3 rounded-lg transition-colors mt-4">
+          Deploy Tournament Environment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('tournamentModal');
+    function toggleTournamentModal() {
+      modal.classList.toggle('hidden');
+    }
+  </script>
+
+  <script type="module" src="./scripts/js/event-dashboard.js"></script>
+</body>
+</html>

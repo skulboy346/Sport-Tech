@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Live Event Tracking | SportTech</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { sportNavy: '#0f172a', sportDark: '#1e293b', sportGreen: '#10b981', gold: '#fbbf24', silver: '#94a3b8', bronze: '#d97706' },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-sportNavy text-white font-sans antialiased overflow-x-hidden">
+
+  <!-- Public Header -->
+  <header class="bg-sportDark border-b border-white/10 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sportGreen to-emerald-700 flex items-center justify-center font-bold text-xl">S</div>
+        <span class="text-xl font-bold tracking-tight">SportTech</span>
+      </div>
+      <span class="px-3 py-1 bg-sportGreen/10 text-sportGreen text-xs font-bold rounded-full uppercase flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-sportGreen animate-pulse"></span> Live
+      </span>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <div class="text-center mb-10">
+      <h1 class="text-3xl md:text-5xl font-extrabold mb-2" id="publicEventName">Loading Event...</h1>
+      <p class="text-slate-400">Official Live Medal Table & Results</p>
+    </div>
+
+    <!-- Live Medal Table -->
+    <div class="bg-sportDark border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-white/5 border-b border-white/10 text-xs uppercase tracking-wider text-slate-400">
+              <th class="px-4 py-4 text-center w-16">Rank</th>
+              <th class="px-4 py-4">House / Team</th>
+              <th class="px-4 py-4 text-center"><div class="w-4 h-4 rounded-full bg-gold mx-auto shadow-[0_0_8px_rgba(251,191,36,0.5)]"></div></th>
+              <th class="px-4 py-4 text-center"><div class="w-4 h-4 rounded-full bg-silver mx-auto shadow-[0_0_8px_rgba(148,163,184,0.5)]"></div></th>
+              <th class="px-4 py-4 text-center"><div class="w-4 h-4 rounded-full bg-bronze mx-auto shadow-[0_0_8px_rgba(217,119,6,0.5)]"></div></th>
+              <th class="px-4 py-4 text-center font-bold text-sportGreen">Total</th>
+            </tr>
+          </thead>
+          <tbody id="publicMedalTableBody" class="divide-y divide-white/10">
+            <tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">Waiting for live data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="./scripts/js/live.js"></script>
+</body>
+</html>

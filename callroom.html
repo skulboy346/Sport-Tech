@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech - Call Room Official</title>
+  
+  <!-- Updated paths to point inside the 'scripts' folder -->
+  <link rel="stylesheet" href="./scripts/css/base.css">
+  <link rel="stylesheet" href="./scripts/css/components.css">
+  <link rel="stylesheet" href="./scripts/css/mobile-field.css">
+</head>
+<body>
+  <header class="field-header">
+    <div>
+      <h2 id="eventTitle">100m Senior Boys - Heat 1</h2>
+      <p id="eventMeta" class="text-muted">Call Room Access | Live Sync</p>
+    </div>
+    <div class="connection-status" id="networkStatus">Online</div>
+  </header>
+
+  <main class="container">
+    <section class="upload-banner">
+      <input type="file" id="rosterImageInput" accept="image/*" capture="environment" hidden>
+      <button class="btn btn-primary" id="btnSnapRoster">
+        📷 Scan Roster Sheet (AI Assistant)
+      </button>
+      <div id="ocrProgress" class="hidden">Parsing handwritten roster...</div>
+    </section>
+
+    <section class="athlete-list" id="athleteListContainer">
+      <!-- Athlete cards will be loaded here by callroom.js -->
+    </section>
+  </main>
+
+  <!-- Updated path to point inside the 'scripts' folder -->
+  <script type="module" src="./scripts/js/callroom.js"></script>
+</body>
+</html>

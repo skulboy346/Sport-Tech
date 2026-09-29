@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech - Official Reports</title>
+  
+  <link rel="stylesheet" href="./scripts/css/base.css">
+  <link rel="stylesheet" href="./scripts/css/components.css">
+  <link rel="stylesheet" href="./scripts/css/dashboard.css">
+  
+  <!-- Load jsPDF and AutoTable from CDN[span_2](start_span)[span_2](end_span) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <header class="field-header">
+    <div>
+      <h2 id="eventTitle">Fresher's Cup 2026 - Reports</h2>
+      <p class="text-muted">Generate Official Documents</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="athlete-card" style="flex-direction: column; align-items: flex-start;">
+      <h3 style="margin-bottom: 10px;">100m Senior Boys - Final</h3>
+      <p class="text-muted" style="margin-bottom: 20px;">Status: Concluded</p>
+      
+      <button class="btn btn-primary" id="btnDownloadRecord" style="width: 100%;">
+        📄 Download PDF Record Sheet
+      </button>
+    </section>
+  </main>
+
+  <script type="module" src="./scripts/js/pdf-export.js"></script>
+</body>
+</html>

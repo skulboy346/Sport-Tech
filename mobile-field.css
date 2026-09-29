@@ -1,0 +1,99 @@
+/* Mobile Field Adjustments for Track Officials */
+.field-header {
+  background-color: var(--surface-dark);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.connection-status {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--accent-green);
+  background: rgba(16, 185, 129, 0.2);
+  padding: 0.35rem 0.75rem;
+  border-radius: 12px;
+}
+
+.upload-banner {
+  margin-top: 1rem;
+  background-color: var(--surface-dark);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.upload-banner button {
+  width: 100%;
+}
+
+.athlete-list {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.athlete-card {
+  background-color: var(--surface-dark);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-color);
+}
+
+.athlete-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.text-muted {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Photo Finish Video Interface */
+.video-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 1rem auto;
+  position: relative;
+  border: 3px solid var(--accent-amber);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.video-container video {
+  width: 100%;
+  display: block;
+}
+
+#finishLineOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 80%; /* Virtual Finish Line Marker */
+  width: 2px;
+  background-color: var(--accent-red);
+  z-index: 5;
+}
+
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  gap: 1rem;
+}
+

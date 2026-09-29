@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech - Organizer Dashboard</title>
+  
+  <link rel="stylesheet" href="./scripts/css/base.css">
+  <link rel="stylesheet" href="./scripts/css/components.css">
+  
+  <style>
+    /* Dashboard-specific grid layout */
+    .dashboard-layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 250px; background-color: var(--surface-dark); padding: 1.5rem; border-right: 1px solid var(--border-color); }
+    .sidebar h2 { color: var(--accent-green); margin-bottom: 2rem; font-size: 1.5rem; }
+    .nav-link { display: block; padding: 0.75rem 1rem; color: var(--text-muted); text-decoration: none; border-radius: 6px; margin-bottom: 0.5rem; }
+    .nav-link:hover, .nav-link.active { background-color: var(--primary-navy); color: white; }
+    .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card { background-color: var(--surface-dark); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); }
+    .stat-card h3 { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; }
+    .stat-card .value { font-size: 2rem; font-weight: bold; }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .dashboard-layout { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 1rem; }
+      .sidebar h2 { margin-bottom: 1rem; }
+      .nav-link { display: inline-block; margin-right: 0.5rem; }
+      .main-content { padding: 1rem; }
+    }
+      /* Modal Styles */
+    .modal-overlay { 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px);
+      display: flex; justify-content: center; align-items: center; z-index: 50; 
+    }
+    .modal-content { 
+      background: var(--surface-dark); padding: 2rem; border-radius: 8px; 
+      width: 90%; max-width: 500px; border: 1px solid var(--border-color); 
+    }
+    .hidden { display: none !important; }
+
+  </style>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <h2>SportTech</h2>
+      <nav>
+        <a href="#" class="nav-link active">📊 Dashboard Overview</a>
+        <a href="#" class="nav-link">🏆 Manage Events</a>
+        <a href="#" class="nav-link">👥 Teams & Rosters</a>
+        <a href="#" class="nav-link">⚙️ Billing & Tokens</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+          <h1 id="activeTournamentName">NUESA Queens Cup 2026</h1>
+          <p class="text-muted">Status: <span style="color: var(--accent-green);">Live</span></p>
+        </div>
+        <button class="btn btn-primary" id="btnCreateEvent">+ Create New Event</button>
+      </header>
+
+      <!-- High-Level Analytics -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Athletes</h3>
+          <div class="value" id="statAthletes">--</div>
+        </div>
+        <div class="stat-card">
+          <h3>Active Houses/Teams</h3>
+          <div class="value" id="statTeams">--</div>
+        </div>
+        <div class="stat-card">
+          <h3>Events Concluded</h3>
+          <div class="value" id="statConcluded">--</div>
+        </div>
+      </section>
+
+      <!-- Quick Actions & Issue Resolution -->
+      <section class="athlete-card" style="flex-direction: column; align-items: flex-start; padding: 1.5rem;">
+        <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; width: 100%;">System Administration</h3>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; width: 100%;">
+          <button class="btn" style="background: var(--surface-dark); border: 1px solid var(--border-color); flex: 1;">
+            🚨 Override Call Room Status
+          </button>
+          <button class="btn" style="background: var(--surface-dark); border: 1px solid var(--border-color); flex: 1;">
+            🔄 Force Sync Medal Table
+          </button>
+          
+          <!-- Monetization Toggle -->
+          <div style="flex: 1; min-width: 200px; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--accent-amber); padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: var(--accent-amber); font-weight: bold;">Require Payment Token</span>
+            <input type="checkbox" id="tokenToggle" style="transform: scale(1.5);">
+          </div>
+        </div>
+      </section>
+            <!-- Create Event Modal (Hidden by default) -->
+      <div id="createEventModal" class="modal-overlay hidden">
+        <div class="modal-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="color: var(--accent-green);">Create New Event</h3>
+            <button id="btnCloseModal" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label class="text-muted">Event Name</label>
+            <input type="text" id="inputEventName" placeholder="e.g., 4x100m Relay Final" style="width: 100%; padding: 10px; margin-top: 5px; background: var(--primary-navy); color: white; border: 1px solid var(--border-color); border-radius: 4px;">
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label class="text-muted">Event Category</label>
+            <select id="inputEventCategory" style="width: 100%; padding: 10px; margin-top: 5px; background: var(--primary-navy); color: white; border: 1px solid var(--border-color); border-radius: 4px;">
+              <option value="track">Track (Sprints & Relays)</option>
+              <option value="field">Field (Jumps & Throws)</option>
+              <option value="marathon">Marathon (Long Distance)</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label class="text-muted">Participating Teams (Comma separated)</label>
+            <input type="text" id="inputTeams" placeholder="e.g., Education, Science, Engineering" style="width: 100%; padding: 10px; margin-top: 5px; background: var(--primary-navy); color: white; border: 1px solid var(--border-color); border-radius: 4px;">
+          </div>
+
+          <button class="btn btn-primary" id="btnSaveEvent" style="width: 100%;">💾 Save Event Schedule</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module" src="./scripts/js/admin.js"></script>
+</body>
+</html>
