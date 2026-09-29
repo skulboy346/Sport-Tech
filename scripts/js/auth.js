@@ -1,3 +1,4 @@
+alert("Auth system connected!");
 // ./scripts/js/auth.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
@@ -86,8 +87,10 @@ function setupRecaptcha() {
   }
 }
 
-btnPhoneAuth.addEventListener('click', async () => {
-  setupRecaptcha();
+if (btnPhoneAuth) {
+  btnPhoneAuth.addEventListener('click', async (e) => {
+    e.preventDefault();
+    setupRecaptcha();
   const phoneNumber = prompt("Enter your phone number with country code (e.g., +234...):");
   
   if (!phoneNumber) return;
