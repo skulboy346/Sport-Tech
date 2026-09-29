@@ -84,82 +84,89 @@
       <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
-      
-      <div class="text-center mb-8">
+
+      <div class="text-center mb-6">
         <h2 id="modalTitle" class="text-2xl font-bold mb-2">Create Organizer Account</h2>
         <p id="modalSubtitle" class="text-slate-400 text-sm">Join the new standard of technical officiating.</p>
       </div>
 
-            <form id="authForm" class="space-y-4">
+      <!-- FORM STARTS HERE -->
+      <form id="authForm" class="space-y-4">
         <div id="orgFieldGroup">
           <label class="block text-xs font-medium text-slate-400 mb-1">Organization / School Name</label>
-          <input type="text" id="orgName" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="e.g., NUESA UNILAG">
+          <input type="text" id="orgName" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white" placeholder="e.g., NUESA UNILAG">
         </div>
 
         <div>
           <label class="block text-xs font-medium text-slate-400 mb-1">Work Email</label>
-          <input type="email" id="email" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="director@example.com">
+          <input type="email" id="email" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white" required>
         </div>
 
         <div>
           <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
-          <input type="password" id="password" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sportGreen transition-colors" placeholder="••••••••">
+          <input type="password" id="password" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white" required>
         </div>
 
-        <button type="submit" id="btnSubmitAuth" class="w-full bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold py-3 rounded-lg transition-colors mt-2">
+        <!-- Hidden Input for auth.js state management -->
+        <input type="hidden" id="authMode" value="signup">
+
+        <button type="submit" id="btnSubmitAuth" class="w-full bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold py-3 rounded-lg transition-colors">
           Create Account
         </button>
-
-        <!-- Divider -->
-        <div class="relative my-4">
-          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-700"></div></div>
-          <div class="relative flex justify-center text-sm"><span class="px-2 bg-sportDark text-slate-400">Or continue with</span></div>
-        </div>
-
-        <!-- Alternative Providers -->
-        <div class="grid grid-cols-2 gap-3">
-          <button type="button" id="btnGoogleAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:border-sportGreen text-white font-semibold py-2.5 rounded-lg transition-all">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
-            Google
-          </button>
-          <button type="button" id="btnPhoneAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:border-sportGreen text-white font-semibold py-2.5 rounded-lg transition-all">
-            📞 Phone
-          </button>
-        </div>
-
-        <!-- Invisible reCAPTCHA container required by Firebase for Phone Auth -->
-        <div id="recaptcha-container" class="mt-2 flex justify-center"></div>
       </form>
+      <!-- FORM ENDS HERE -->
 
-      
+      <!-- Divider -->
+      <div class="relative my-6">
+        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-700"></div></div>
+        <div class="relative flex justify-center text-sm"><span class="px-2 bg-sportDark text-slate-400">Or continue with</span></div>
+      </div>
+
+      <!-- Alternative Providers (Now safely OUTSIDE the form) -->
+      <div class="grid grid-cols-2 gap-3">
+        <button type="button" id="btnGoogleAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:bg-slate-800 text-white py-3 rounded-lg transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+          Google
+        </button>
+        <button type="button" id="btnPhoneAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:bg-slate-800 text-white py-3 rounded-lg transition-colors">
+          📞 Phone
+        </button>
+      </div>
+
+      <!-- Invisible reCAPTCHA container required by Firebase for Phone Auth -->
+      <div id="recaptcha-container" class="mt-2 flex justify-center"></div>
+
       <p class="text-center text-sm text-slate-400 mt-6" id="authSwitchText">
-        Already have an account? <button onclick="toggleAuthModal('login')" class="text-sportGreen font-semibold hover:underline">Log in</button>
+        Already have an account? <button type="button" onclick="toggleAuthModal('login')" class="text-sportGreen font-semibold hover:underline">Log In</button>
       </p>
     </div>
   </div>
 
   <!-- UI Logic for Modal -->
   <script>
-    let isSignUp = true;
     const modal = document.getElementById('authModal');
     const orgFieldGroup = document.getElementById('orgFieldGroup');
+    const orgNameInput = document.getElementById('orgName');
     const modalTitle = document.getElementById('modalTitle');
     const btnSubmitAuth = document.getElementById('btnSubmitAuth');
     const authSwitchText = document.getElementById('authSwitchText');
+    const authModeInput = document.getElementById('authMode');
 
     function toggleAuthModal(mode = null) {
       if (mode === 'login') {
-        isSignUp = false;
         orgFieldGroup.classList.add('hidden');
+        orgNameInput.removeAttribute('required');
         modalTitle.innerText = 'Welcome Back';
         btnSubmitAuth.innerText = 'Log In';
-        authSwitchText.innerHTML = `Need an account? <button onclick="toggleAuthModal('signup')" class="text-sportGreen font-semibold hover:underline">Sign up</button>`;
+        authModeInput.value = 'login';
+        authSwitchText.innerHTML = 'Need an account? <button type="button" onclick="toggleAuthModal(\'signup\')" class="text-sportGreen font-semibold hover:underline">Sign Up</button>';
       } else if (mode === 'signup') {
-        isSignUp = true;
         orgFieldGroup.classList.remove('hidden');
+        orgNameInput.setAttribute('required', 'true');
         modalTitle.innerText = 'Create Organizer Account';
         btnSubmitAuth.innerText = 'Create Account';
-        authSwitchText.innerHTML = `Already have an account? <button onclick="toggleAuthModal('login')" class="text-sportGreen font-semibold hover:underline">Log in</button>`;
+        authModeInput.value = 'signup';
+        authSwitchText.innerHTML = 'Already have an account? <button type="button" onclick="toggleAuthModal(\'login\')" class="text-sportGreen font-semibold hover:underline">Log In</button>';
       }
       modal.classList.toggle('hidden');
     }
