@@ -31,4 +31,4 @@ jobs:
       - name: Deploy to Firebase Hosting
         run: firebase deploy --only hosting
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPORTTEACH_WEB }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPORTTECH_WEB }}
