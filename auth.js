@@ -5,7 +5,8 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   GoogleAuthProvider, 
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   RecaptchaVerifier,
   signInWithPhoneNumber
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -15,6 +16,15 @@ import { firebaseConfig } from "./config.js";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Catch the user returning from Google's native mobile login screen
+getRedirectResult(auth).then(async (result) => {
+  if (result && result.user) {
+    await saveOrganizerProfile(result.user, "Independent Organizer");
+  }
+}).catch((error) => {
+  console.error("Google Sign-In Redirect Failed: " + error.message);
+});
 
 const authForm = document.getElementById('authForm');
 const btnGoogleAuth = document.getElementById('btnGoogleAuth');
@@ -60,15 +70,10 @@ authForm.addEventListener('submit', async (e) => {
   }
 });
 
-// --- 3. Google Sign-In ---
-btnGoogleAuth.addEventListener('click', async () => {
+// 3. Google Sign-In (Mobile Friendly Redirect)
+btnGoogleAuth.addEventListener('click', () => {
   const provider = new GoogleAuthProvider();
-  try {
-    const userCredential = await signInWithPopup(auth, provider);
-    await saveOrganizerProfile(userCredential.user);
-  } catch (error) {
-    alert("Google Sign-In Failed: " + error.message);
-  }
+  signInWithRedirect(auth, provider);
 });
 
 // --- 4. Phone Number OTP Auth ---
