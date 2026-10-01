@@ -1,141 +1,379 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SportTech - Organizer Dashboard</title>
-  
-  <link rel="stylesheet" href="./scripts/css/base.css">
-  <link rel="stylesheet" href="./scripts/css/components.css">
-  
+  <title>SportTech | Executive Master Enterprise Command</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { adminDark: '#030303', adminCard: '#0f0f0f', accent: '#10b981', botBlue: '#3b82f6', adminRed: '#ef4444' } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <style>
-    /* Dashboard-specific grid layout */
-    .dashboard-layout { display: flex; min-height: 100vh; }
-    .sidebar { width: 250px; background-color: var(--surface-dark); padding: 1.5rem; border-right: 1px solid var(--border-color); }
-    .sidebar h2 { color: var(--accent-green); margin-bottom: 2rem; font-size: 1.5rem; }
-    .nav-link { display: block; padding: 0.75rem 1rem; color: var(--text-muted); text-decoration: none; border-radius: 6px; margin-bottom: 0.5rem; }
-    .nav-link:hover, .nav-link.active { background-color: var(--primary-navy); color: white; }
-    .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
-    
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .stat-card { background-color: var(--surface-dark); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); }
-    .stat-card h3 { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; }
-    .stat-card .value { font-size: 2rem; font-weight: bold; }
-    
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      .dashboard-layout { flex-direction: column; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 1rem; }
-      .sidebar h2 { margin-bottom: 1rem; }
-      .nav-link { display: inline-block; margin-right: 0.5rem; }
-      .main-content { padding: 1rem; }
-    }
-      /* Modal Styles */
-    .modal-overlay { 
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px);
-      display: flex; justify-content: center; align-items: center; z-index: 50; 
-    }
-    .modal-content { 
-      background: var(--surface-dark); padding: 2rem; border-radius: 8px; 
-      width: 90%; max-width: 500px; border: 1px solid var(--border-color); 
-    }
-    .hidden { display: none !important; }
-
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    .glass-panel { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
-<body>
-  <div class="dashboard-layout">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-      <h2>SportTech</h2>
-      <nav>
-        <a href="#" class="nav-link active">📊 Dashboard Overview</a>
-        <a href="#" class="nav-link">🏆 Manage Events</a>
-        <a href="#" class="nav-link">👥 Teams & Rosters</a>
-        <a href="#" class="nav-link">⚙️ Billing & Tokens</a>
-      </nav>
-    </aside>
+<body class="bg-adminDark text-white font-sans antialiased hidden relative selection:bg-accent selection:text-adminDark" id="adminBody">
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <!-- NAVIGATION -->
+  <nav class="fixed top-0 w-full z-40 glass-panel border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between px-6 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-adminRed flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.4)]">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        </div>
         <div>
-          <h1 id="activeTournamentName">NUESA Queens Cup 2026</h1>
-          <p class="text-muted">Status: <span style="color: var(--accent-green);">Live</span></p>
-        </div>
-        <button class="btn btn-primary" id="btnCreateEvent">+ Create New Event</button>
-      </header>
-
-      <!-- High-Level Analytics -->
-      <section class="stats-grid">
-        <div class="stat-card">
-          <h3>Total Athletes</h3>
-          <div class="value" id="statAthletes">--</div>
-        </div>
-        <div class="stat-card">
-          <h3>Active Houses/Teams</h3>
-          <div class="value" id="statTeams">--</div>
-        </div>
-        <div class="stat-card">
-          <h3>Events Concluded</h3>
-          <div class="value" id="statConcluded">--</div>
-        </div>
-      </section>
-
-      <!-- Quick Actions & Issue Resolution -->
-      <section class="athlete-card" style="flex-direction: column; align-items: flex-start; padding: 1.5rem;">
-        <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; width: 100%;">System Administration</h3>
-        
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; width: 100%;">
-          <button class="btn" style="background: var(--surface-dark); border: 1px solid var(--border-color); flex: 1;">
-            🚨 Override Call Room Status
-          </button>
-          <button class="btn" style="background: var(--surface-dark); border: 1px solid var(--border-color); flex: 1;">
-            🔄 Force Sync Medal Table
-          </button>
-          
-          <!-- Monetization Toggle -->
-          <div style="flex: 1; min-width: 200px; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--accent-amber); padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="color: var(--accent-amber); font-weight: bold;">Require Payment Token</span>
-            <input type="checkbox" id="tokenToggle" style="transform: scale(1.5);">
-          </div>
-        </div>
-      </section>
-            <!-- Create Event Modal (Hidden by default) -->
-      <div id="createEventModal" class="modal-overlay hidden">
-        <div class="modal-content">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 style="color: var(--accent-green);">Create New Event</h3>
-            <button id="btnCloseModal" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
-          </div>
-          
-          <div style="margin-bottom: 1rem;">
-            <label class="text-muted">Event Name</label>
-            <input type="text" id="inputEventName" placeholder="e.g., 4x100m Relay Final" style="width: 100%; padding: 10px; margin-top: 5px; background: var(--primary-navy); color: white; border: 1px solid var(--border-color); border-radius: 4px;">
-          </div>
-          
-          <div style="margin-bottom: 1rem;">
-            <label class="text-muted">Event Category</label>
-            <select id="inputEventCategory" style="width: 100%; padding: 10px; margin-top: 5px; background: var(--primary-navy); color: white; border: 1px solid var(--border-color); border-radius: 4px;">
-              <option value="track">Track (Sprints & Relays)</option>
-              <option value="field">Field (Jumps & Throws)</option>
-              <option value="marathon">Marathon (Long Distance)</option>
-            </select>
-          </div>
-
-          <div style="margin-bottom: 1.5rem;">
-            <label class="text-muted">Participating Teams (Comma separated)</label>
-            <input type="text" id="inputTeams" placeholder="e.g., Education, Science, Engineering" style="width: 100%; padding: 10px; margin-top: 5px; background: var(--primary-navy); color: white; border: 1px solid var(--border-color); border-radius: 4px;">
-          </div>
-
-          <button class="btn btn-primary" id="btnSaveEvent" style="width: 100%;">💾 Save Event Schedule</button>
+          <h1 class="font-black tracking-tight text-base leading-none">SPORTTECH ENTERPRISE</h1>
+          <span class="text-[9px] text-adminRed font-bold uppercase tracking-widest">Master Admin Command</span>
         </div>
       </div>
+      <button id="btnLogoutMobile" class="md:hidden text-xs text-neutral-400">Exit</button>
+    </div>
 
-    </main>
+    <!-- PILLARS -->
+    <div class="flex gap-1 overflow-x-auto no-scrollbar py-2 md:py-0">
+      <button onclick="switchPillar('pillarOverview', this)" class="pillar-btn px-4 py-2 text-xs font-bold rounded-lg bg-white/10 text-white transition whitespace-nowrap">📊 Overview</button>
+      <button onclick="switchPillar('pillarCompany', this)" class="pillar-btn px-4 py-2 text-xs font-bold rounded-lg text-neutral-400 hover:text-white transition whitespace-nowrap">👥 Staff & Activity</button>
+      <button onclick="switchPillar('pillarMonetization', this)" class="pillar-btn px-4 py-2 text-xs font-bold rounded-lg text-neutral-400 hover:text-white transition whitespace-nowrap">💰 Payments & Pricing</button>
+      <button onclick="switchPillar('pillarPlatform', this)" class="pillar-btn px-4 py-2 text-xs font-bold rounded-lg text-neutral-400 hover:text-white transition whitespace-nowrap">⚙️ Ecosystem & Users</button>
+      <button onclick="switchPillar('pillarSecurity', this)" class="pillar-btn px-4 py-2 text-xs font-bold rounded-lg text-neutral-400 hover:text-white transition whitespace-nowrap">🛡️ Audit Logs</button>
+    </div>
+
+    <button id="btnLogout" class="hidden md:block text-xs font-semibold text-neutral-400 hover:text-white border border-white/10 px-4 py-2 rounded-xl transition">Exit Portal</button>
+  </nav>
+
+  <main class="max-w-7xl mx-auto mt-32 md:mt-24 px-4 pb-24 space-y-8">
+
+    <!-- ========================================== -->
+    <!-- PILLAR 1: OVERVIEW                         -->
+    <!-- ========================================== -->
+    <div id="pillarOverview" class="admin-pillar space-y-6 fade-in">
+      <h2 class="text-2xl font-black">Executive Telemetry</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass-panel p-5 rounded-2xl"><p class="text-[10px] text-neutral-400 font-bold uppercase">Total Users</p><p class="text-3xl font-black" id="statTotalUsers">--</p></div>
+        <div class="glass-panel p-5 rounded-2xl"><p class="text-[10px] text-neutral-400 font-bold uppercase">Organisers</p><p class="text-3xl font-black text-botBlue" id="statOrganisers">--</p></div>
+        <div class="glass-panel p-5 rounded-2xl"><p class="text-[10px] text-neutral-400 font-bold uppercase">Athletes / Fans</p><p class="text-3xl font-black text-accent" id="statAthletes">--</p></div>
+        <div class="glass-panel p-5 rounded-2xl"><p class="text-[10px] text-neutral-400 font-bold uppercase">Gross Revenue</p><p class="text-3xl font-black text-yellow-500" id="statOverviewRevenue">₦0</p></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PILLAR 2: STAFF & ACTIVITY TELEMETRY       -->
+    <!-- ========================================== -->
+    <div id="pillarCompany" class="admin-pillar hidden space-y-6 fade-in">
+      <div class="flex justify-between items-center">
+        <div><h2 class="text-2xl font-black">Subordinate Staff & Presence Telemetry</h2><p class="text-sm text-neutral-400">Monitor staff online/offline status, operational tasks, and departmental presence.</p></div>
+        <button onclick="generateStaffLink()" class="bg-botBlue text-white font-bold px-5 py-3 rounded-xl text-xs shadow-lg">+ Generate Staff Invite</button>
+      </div>
+      <div class="glass-panel rounded-2xl overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-black/40 text-[10px] uppercase text-neutral-500"><tr><th class="px-6 py-4">Agent Name</th><th class="px-6 py-4">Presence Status</th><th class="px-6 py-4">Role</th><th class="px-6 py-4 text-right">Veto Action</th></tr></thead>
+          <tbody id="staffRosterTableBody" class="text-sm divide-y divide-white/5"><tr><td colspan="4" class="py-8 text-center text-neutral-500 italic">Syncing workforce...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PILLAR 3: PAYMENTS, PRICING & DISCOUNTS    -->
+    <!-- ========================================== -->
+    <div id="pillarMonetization" class="admin-pillar hidden space-y-6 fade-in">
+      <div class="flex justify-between items-center">
+        <div><h2 class="text-2xl font-black">Payment Gateways, Subscriptions & Service Pricing</h2><p class="text-sm text-neutral-400">Control review fees, monthly/yearly badge subscriptions, ticketing commissions, and discount toggles.</p></div>
+        <button onclick="savePricingConfiguration()" class="bg-accent text-feedDark font-bold px-5 py-3 rounded-xl text-xs shadow-lg">Save Pricing Settings</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Gateway Master Switch -->
+        <div class="glass-panel p-6 rounded-2xl space-y-4">
+          <h3 class="font-bold text-base text-adminRed">Payment Gateway Status</h3>
+          <p class="text-xs text-neutral-400">Turn all platform payments ON or OFF globally.</p>
+          <div class="flex items-center justify-between bg-feedDark p-3 rounded-xl border border-white/5">
+            <span class="text-xs font-bold" id="gatewayStatusText">Active</span>
+            <button onclick="togglePaymentGateway()" id="gatewayToggleBtn" class="bg-accent/20 text-accent text-xs font-bold px-3 py-1.5 rounded-lg transition">Turn OFF</button>
+          </div>
+        </div>
+
+        <!-- Review Fee -->
+        <div class="glass-panel p-6 rounded-2xl space-y-4">
+          <h3 class="font-bold text-base text-accent">Review / KYC Fee</h3>
+          <p class="text-xs text-neutral-400">One-time compliance review cost.</p>
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">Amount (NGN)</label>
+            <input type="number" id="priceReview" class="w-full bg-feedDark border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-mono outline-none" value="5000">
+          </div>
+        </div>
+
+        <!-- Verified Badge Monthly / Yearly Subscriptions -->
+        <div class="glass-panel p-6 rounded-2xl space-y-4">
+          <h3 class="font-bold text-base text-botBlue">Verified Badge Subscription</h3>
+          <p class="text-xs text-neutral-400">Monthly and yearly recurring plans.</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-neutral-400 mb-1">Monthly (NGN)</label>
+              <input type="number" id="priceMonthly" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white font-mono outline-none" value="2000">
+            </div>
+            <div>
+              <label class="block text-[10px] text-neutral-400 mb-1">Yearly (NGN)</label>
+              <input type="number" id="priceYearly" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white font-mono outline-none" value="20000">
+            </div>
+          </div>
+        </div>
+
+        <!-- Commission & Discounts -->
+        <div class="glass-panel p-6 rounded-2xl space-y-4">
+          <h3 class="font-bold text-base text-yellow-500">Commission & Discounts</h3>
+          <p class="text-xs text-neutral-400">Ticket sales commission and promos.</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-neutral-400 mb-1">Commission (%)</label>
+              <input type="number" id="priceCommission" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white font-mono outline-none" value="3.5">
+            </div>
+            <div>
+              <label class="block text-[10px] text-neutral-400 mb-1">Discount (%)</label>
+              <input type="number" id="priceDiscount" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white font-mono outline-none" value="0">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PILLAR 4: ECOSYSTEM & USERS                -->
+    <!-- ========================================== -->
+    <div id="pillarPlatform" class="admin-pillar hidden space-y-6 fade-in">
+      <h2 class="text-2xl font-black">Ecosystem User Matrix & Veto Inspector</h2>
+      <div class="glass-panel rounded-2xl overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-black/40 text-[10px] uppercase text-neutral-500"><tr><th class="px-6 py-4">User Identity</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 text-right">Deep Inspect & Veto</th></tr></thead>
+          <tbody id="platformUserTableBody" class="text-sm divide-y divide-white/5"><tr><td colspan="4" class="py-12 text-center text-neutral-500 italic">Syncing user directory...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PILLAR 5: AUDIT LOGS                       -->
+    <!-- ========================================== -->
+    <div id="pillarSecurity" class="admin-pillar hidden space-y-6 fade-in">
+      <h2 class="text-2xl font-black">Immutable Security Audit Trail</h2>
+      <div class="glass-panel rounded-2xl overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-black/40 text-[10px] uppercase text-neutral-500"><tr><th class="px-6 py-4">Timestamp</th><th class="px-6 py-4">Operator</th><th class="px-6 py-4">Action</th><th class="px-6 py-4">Details</th></tr></thead>
+          <tbody id="auditLedgerTableBody" class="text-sm divide-y divide-white/5"><tr><td colspan="4" class="py-12 text-center text-neutral-500 italic">Ledger synchronized.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- DEEP INSPECT & VETO MODAL -->
+  <div id="inspectModal" class="fixed inset-0 z-50 hidden flex justify-center items-center p-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('inspectModal')"></div>
+    <div class="relative glass-panel border border-white/10 w-full max-w-lg rounded-3xl p-6 shadow-2xl space-y-6">
+      <div class="flex justify-between items-center border-b border-white/10 pb-4">
+        <div><h3 class="font-bold text-lg" id="modalUserName">User Inspection</h3><p class="text-xs text-neutral-400" id="modalUserEmail">user@email.com</p></div>
+        <button onclick="toggleModal('inspectModal')" class="text-neutral-400 hover:text-white">✕</button>
+      </div>
+      <div class="space-y-3 text-sm" id="modalUserDetails"></div>
+      <div class="pt-4 border-t border-white/10 flex gap-3">
+        <button id="modalActionVetoBtn" class="flex-1 bg-adminRed hover:bg-red-600 text-white font-bold py-3 rounded-xl text-xs transition">Suspend User Account</button>
+        <button onclick="toggleModal('inspectModal')" class="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl text-xs transition">Close Inspector</button>
+      </div>
+    </div>
   </div>
 
-  <script type="module" src="./scripts/js/admin.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyC1zozSx_Ox4uf3IN8zBN0dKE--rpIohgU", authDomain: "sportteach-web.firebaseapp.com", projectId: "sportteach-web", storageBucket: "sportteach-web.firebasestorage.app", messagingSenderId: "155474289568", appId: "1:155474289568:web:7248149d14dd63e35a3ac5" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUserDoc = null;
+    let gatewayActive = true;
+
+    window.switchPillar = function(pillarId, btnElement) {
+      document.querySelectorAll('.admin-pillar').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.pillar-btn').forEach(b => { b.className = 'pillar-btn px-4 py-2 text-xs font-bold rounded-lg text-neutral-400 hover:text-white transition whitespace-nowrap'; });
+      document.getElementById(pillarId).classList.remove('hidden');
+      btnElement.className = 'pillar-btn px-4 py-2 text-xs font-bold rounded-lg bg-white/10 text-white transition whitespace-nowrap';
+    };
+
+    window.toggleModal = function(id) { document.getElementById(id).classList.toggle('hidden'); };
+
+    window.togglePaymentGateway = async function() {
+      gatewayActive = !gatewayActive;
+      const statusText = document.getElementById('gatewayStatusText');
+      const toggleBtn = document.getElementById('gatewayToggleBtn');
+      
+      statusText.innerText = gatewayActive ? "Active" : "Disabled";
+      statusText.className = gatewayActive ? "text-xs font-bold text-accent" : "text-xs font-bold text-adminRed";
+      toggleBtn.innerText = gatewayActive ? "Turn OFF" : "Turn ON";
+      toggleBtn.className = gatewayActive ? "bg-adminRed/20 text-adminRed text-xs font-bold px-3 py-1.5 rounded-lg transition" : "bg-accent/20 text-accent text-xs font-bold px-3 py-1.5 rounded-lg transition";
+
+      await setDoc(doc(db, "platform_settings", "pricing"), { gatewayActive: gatewayActive }, { merge: true });
+      alert(`Payment gateways successfully turned ${gatewayActive ? 'ON' : 'OFF'}.`);
+    };
+
+    window.savePricingConfiguration = async function() {
+      try {
+        const payload = {
+          reviewFee: Number(document.getElementById('priceReview').value),
+          subscriptionMonthly: Number(document.getElementById('priceMonthly').value),
+          subscriptionYearly: Number(document.getElementById('priceYearly').value),
+          commissionRate: Number(document.getElementById('priceCommission').value),
+          discountRate: Number(document.getElementById('priceDiscount').value),
+          gatewayActive: gatewayActive,
+          updatedAt: serverTimestamp()
+        };
+        await setDoc(doc(db, "platform_settings", "pricing"), payload, { merge: true });
+        alert("Platform pricing, subscription fees & discounts saved successfully!");
+      } catch (err) { alert("Error saving settings."); }
+    };
+
+    async function loadPricingConfiguration() {
+      try {
+        const snap = await getDoc(doc(db, "platform_settings", "pricing"));
+        if(snap.exists()) {
+          const p = snap.data();
+          if(p.reviewFee) document.getElementById('priceReview').value = p.reviewFee;
+          if(p.subscriptionMonthly) document.getElementById('priceMonthly').value = p.subscriptionMonthly;
+          if(p.subscriptionYearly) document.getElementById('priceYearly').value = p.subscriptionYearly;
+          if(p.commissionRate) document.getElementById('priceCommission').value = p.commissionRate;
+          if(p.discountRate) document.getElementById('priceDiscount').value = p.discountRate;
+          if(p.gatewayActive !== undefined) {
+            gatewayActive = p.gatewayActive;
+            const statusText = document.getElementById('gatewayStatusText');
+            statusText.innerText = gatewayActive ? "Active" : "Disabled";
+          }
+        }
+      } catch(e) {}
+    }
+
+    window.inspectUser = async function(uid) {
+      const uSnap = await getDoc(doc(db, "users", uid));
+      if(!uSnap.exists()) return alert("User not found.");
+      const u = uSnap.data();
+
+      document.getElementById('modalUserName').innerText = u.fullName || u.username || "User Account";
+      document.getElementById('modalUserEmail').innerText = `@${u.username || 'unknown'} • Role: ${u.role}`;
+      
+      document.getElementById('modalUserDetails').innerHTML = `
+        <div class="bg-feedDark p-3 rounded-xl border border-white/5 space-y-1">
+          <p class="text-[10px] text-neutral-400 uppercase font-bold">Demographics</p>
+          <p class="text-xs">Gender: ${u.gender || 'N/A'} | State: ${u.state || 'N/A'}</p>
+        </div>
+        <div class="bg-feedDark p-3 rounded-xl border border-white/5 space-y-1">
+          <p class="text-[10px] text-neutral-400 uppercase font-bold">Account Status</p>
+          <p class="text-xs text-accent font-bold">${u.isVerified ? 'Verified Approved' : 'Standard Basic'} (${u.accountStatus || 'active'})</p>
+        </div>`;
+
+      document.getElementById('modalActionVetoBtn').onclick = async () => {
+        const newStatus = u.accountStatus === 'suspended' ? 'active' : 'suspended';
+        await updateDoc(doc(db, "users", uid), { accountStatus: newStatus });
+        alert(`User status toggled to: ${newStatus}`);
+        toggleModal('inspectModal');
+        fetchAllData();
+      };
+
+      toggleModal('inspectModal');
+    };
+
+    window.generateStaffLink = function() {
+      const token = Math.random().toString(36).substring(2, 12);
+      alert(`Staff Onboarding Token Generated:\n\nhttps://sporttech.app/join?invite=${token}`);
+    };
+
+    async function fetchAllData() {
+      const usersSnap = await getDocs(collection(db, "users"));
+      let totalUsers = 0, organisers = 0, athletes = 0, verifiedCount = 0;
+      const userTable = document.getElementById('platformUserTableBody');
+      const staffTable = document.getElementById('staffRosterTableBody');
+      userTable.innerHTML = ''; staffTable.innerHTML = '';
+
+      usersSnap.forEach(docSnap => {
+        totalUsers++;
+        const u = docSnap.data();
+        const uid = docSnap.id;
+
+        if(u.role === 'organizer') organisers++;
+        if(u.role === 'fan') athletes++;
+        if(u.isVerified) verifiedCount++;
+
+        // Staff & Activity Telemetry (Online/Offline check based on last seen)
+        if(u.role === 'staff' || u.role === 'admin') {
+          const isOnline = u.updatedAt && (Date.now() - u.updatedAt.toMillis() < 300000); // active within 5 mins
+          const presenceBadge = isOnline ? '<span class="text-accent font-bold text-xs">● Online</span>' : '<span class="text-neutral-500 text-xs">○ Offline</span>';
+
+          staffTable.innerHTML += `
+            <tr class="hover:bg-white/5 transition border-b border-white/5">
+              <td class="px-6 py-4 font-bold">@${u.username || 'agent'}</td>
+              <td class="px-6 py-4">${presenceBadge}</td>
+              <td class="px-6 py-4 text-xs"><span class="bg-botBlue/20 text-botBlue px-2 py-0.5 rounded font-bold uppercase">${u.role}</span></td>
+              <td class="px-6 py-4 text-right"><button onclick="inspectUser('${uid}')" class="text-xs bg-white/10 px-3 py-1.5 rounded transition font-bold">Veto Inspect</button></td>
+            </tr>`;
+        }
+
+        userTable.innerHTML += `
+          <tr class="hover:bg-white/5 transition border-b border-white/5">
+            <td class="px-6 py-4 font-bold">@${u.username || 'unknown'}</td>
+            <td class="px-6 py-4"><span class="bg-white/10 px-2 py-1 rounded text-[10px] uppercase">${u.role}</span></td>
+            <td class="px-6 py-4"><span class="${u.accountStatus === 'suspended' ? 'text-adminRed' : 'text-accent'} text-xs font-bold">${u.accountStatus || 'Active'}</span></td>
+            <td class="px-6 py-4 text-right"><button onclick="inspectUser('${uid}')" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition font-bold">Deep Inspect</button></td>
+          </tr>`;
+      });
+
+      document.getElementById('statTotalUsers').innerText = totalUsers.toLocaleString();
+      document.getElementById('statOrganisers').innerText = organisers.toLocaleString();
+      document.getElementById('statAthletes').innerText = athletes.toLocaleString();
+      document.getElementById('statOverviewRevenue').innerText = `₦${(verifiedCount * 5000).toLocaleString()}`;
+    }
+
+    function loadAuditLogs() {
+      const q = query(collection(db, "audit_logs"), orderBy("timestamp", "desc"), limit(30));
+      getDocs(q).then(snap => {
+        const tbody = document.getElementById('auditLedgerTableBody');
+        tbody.innerHTML = '';
+        if(snap.empty) return tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-neutral-500 italic">No audit records.</td></tr>';
+        snap.forEach(d => {
+          const l = d.data();
+          tbody.innerHTML += `
+            <tr class="hover:bg-white/5 transition border-b border-white/5">
+              <td class="px-6 py-4 text-xs text-neutral-400">${l.timestamp ? new Date(l.timestamp.toDate()).toLocaleString() : 'Recent'}</td>
+              <td class="px-6 py-4 font-bold">@${l.staffName || 'Admin'}</td>
+              <td class="px-6 py-4"><span class="bg-white/10 px-2 py-1 rounded text-[10px] uppercase font-bold">${l.action}</span></td>
+              <td class="px-6 py-4 text-xs text-neutral-400">${l.details}</td>
+            </tr>`;
+        });
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if(!user) return window.location.href = "index.html";
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if(userSnap.exists()) {
+        currentUserDoc = userSnap.data();
+        if(currentUserDoc.role === 'admin') {
+          document.getElementById('adminBody').classList.remove('hidden');
+          fetchAllData();
+          loadPricingConfiguration();
+          loadAuditLogs();
+        } else { window.location.href = "index.html"; }
+      }
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', () => signOut(auth).then(() => window.location.href = "index.html"));
+  </script>
 </body>
 </html>

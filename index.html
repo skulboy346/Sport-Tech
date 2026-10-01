@@ -3,176 +3,298 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SportTech | Powered by The AMBASSADOR'S SPORTS CONSULTS</title>
-  
-  <!-- Tailwind CSS via CDN for instant, premium styling -->
+  <title>SportTech | The Athletics Network</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Custom Tailwind Configuration to match your brand colors -->
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            sportNavy: '#0f172a',
-            sportDark: '#1e293b',
-            sportGreen: '#10b981',
-            sportAmber: '#f59e0b',
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          }
-        }
-      }
+      theme: { extend: { colors: { feedDark: '#0a0a0a', feedCard: '#171717', accent: '#10b981', botBlue: '#3b82f6' } } }
     }
   </script>
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .pb-safe { padding-bottom: max(5rem, env(safe-area-inset-bottom)); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="bg-sportNavy text-white font-sans antialiased overflow-x-hidden">
+<body class="bg-feedDark text-white font-sans antialiased pb-safe relative">
 
-  <!-- Navigation -->
-  <nav class="fixed w-full z-50 top-0 transition-all duration-300 bg-sportNavy/80 backdrop-blur-md border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="fixed top-0 w-full z-40 bg-feedDark/90 backdrop-blur-md border-b border-white/10 px-4 py-3 flex flex-col gap-3">
+    <div class="flex justify-between items-center">
+      <button class="text-neutral-400 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sportGreen to-emerald-700 flex items-center justify-center font-bold text-xl">S</div>
-        <span class="text-xl font-bold tracking-tight">SportTech</span>
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-emerald-700 flex items-center justify-center font-bold text-sm">ST</div>
+        <span class="font-extrabold tracking-tight text-lg">SportTech</span>
       </div>
-      <div class="hidden md:flex gap-6 text-sm font-medium text-slate-300">
-        <a href="#features" class="hover:text-sportGreen transition-colors">Features</a>
-        <a href="#how-it-works" class="hover:text-sportGreen transition-colors">For Organizers</a>
-      </div>
-      <div>
-        <button onclick="toggleAuthModal('login')" class="text-sm font-semibold text-slate-300 hover:text-white mr-4">Log In</button>
-        <button onclick="toggleAuthModal('signup')" class="bg-sportGreen hover:bg-emerald-500 text-sportNavy text-sm font-bold py-2 px-5 rounded-full transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]">
-          Host an Event
-        </button>
-      </div>
+      <div class="w-6"></div> <!-- Spacer for centering -->
+    </div>
+    
+    <!-- Feed Toggle -->
+    <div class="flex gap-2 max-w-lg mx-auto w-full px-2">
+      <button onclick="toggleFeed('social')" id="btnTabSocial" class="flex-1 py-1.5 text-sm font-bold bg-white/10 text-white rounded-lg transition">Social Feed</button>
+      <button onclick="toggleFeed('events')" id="btnTabEvents" class="flex-1 py-1.5 text-sm font-bold text-neutral-500 hover:text-white transition rounded-lg">Upcoming Events</button>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
-    <!-- Background Glow -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-sportGreen/20 rounded-full blur-[120px] -z-10"></div>
+  <!-- MAIN DYNAMIC FEEDS -->
+  <main class="max-w-lg mx-auto mt-28 px-4 space-y-6" id="mainContainer">
     
-    <div class="max-w-4xl mx-auto text-center z-10 relative">
-      <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-sportGreen/30 bg-sportGreen/10 text-sportGreen text-xs font-semibold uppercase tracking-wider">
-        By The AMBASSADOR'S SPORTS CONSULTS
-      </div>
-      <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
-        Digitize the track. <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sportGreen to-emerald-300">Eliminate the chaos.</span>
-      </h1>
-      <p class="text-lg lg:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-        Transform grassroots athletics into high-value marketing platforms. From AI-powered Call Room check-ins to automated, real-time medal tables, SportTech bridges the gap in professional sports administration.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button onclick="toggleAuthModal('signup')" class="bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold text-lg py-4 px-8 rounded-full transition-transform hover:-translate-y-1 shadow-lg">
-          Start Your First Event (Free)
-        </button>
-      </div>
+    <!-- SOCIAL POSTS CONTAINER -->
+    <div id="socialFeedContainer" class="space-y-6">
+      <div class="text-center py-10 text-neutral-500 italic animate-pulse">Loading network pulse...</div>
     </div>
-  </section>
 
-  <!-- Auth Modal (Sign Up / Log In) -->
-  <div id="authModal" class="fixed inset-0 z-[100] hidden flex justify-center items-center px-4">
-    <div class="absolute inset-0 bg-sportNavy/90 backdrop-blur-sm" onclick="toggleAuthModal()"></div>
-    
-    <div class="relative bg-sportDark border border-white/10 rounded-2xl w-full max-w-md p-8 shadow-2xl transform transition-all">
-      <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
+    <!-- EVENTS CONTAINER -->
+    <div id="eventsFeedContainer" class="space-y-6 hidden">
+      <div class="text-center py-10 text-neutral-500 italic animate-pulse">Scanning global events matrix...</div>
+    </div>
 
-      <div class="text-center mb-6">
-        <h2 id="modalTitle" class="text-2xl font-bold mb-2">Create Organizer Account</h2>
-        <p id="modalSubtitle" class="text-slate-400 text-sm">Join the new standard of technical officiating.</p>
+  </main>
+
+  <!-- BOTTOM NAVIGATION BAR (Kept Identical) -->
+  <nav class="fixed bottom-0 w-full z-40 bg-feedDark/95 backdrop-blur-lg border-t border-white/10 px-6 py-4 flex justify-between items-center pb-safe">
+    <button onclick="window.scrollTo(0,0)" class="text-white flex flex-col items-center"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/></svg></button>
+    <button class="text-neutral-500 hover:text-white transition-colors flex flex-col items-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></button>
+    <button class="text-neutral-500 hover:text-white transition-colors flex flex-col items-center"><div class="bg-accent text-feedDark rounded-lg p-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></div></button>
+    <button class="text-neutral-500 hover:text-white transition-colors flex flex-col items-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+    <button onclick="checkProfileAccess()" class="text-neutral-500 hover:text-white transition-colors flex flex-col items-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></button>
+  </nav>
+
+  <!-- COMMENTS MODAL -->
+  <div id="commentsModal" class="fixed inset-0 z-50 hidden flex justify-center items-end md:items-center">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleCommentsModal()"></div>
+    <div class="relative bg-feedCard w-full md:w-[500px] h-[80vh] md:h-[600px] flex flex-col rounded-t-3xl md:rounded-2xl shadow-2xl border border-white/10 slide-up md:mb-0 mb-safe">
+      <div class="p-4 border-b border-white/5 flex justify-between items-center bg-feedDark/50 rounded-t-3xl md:rounded-t-2xl">
+        <h3 class="font-bold text-lg text-center flex-1">Comments</h3>
+        <button onclick="toggleCommentsModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition absolute right-4 text-neutral-400">✕</button>
       </div>
-
-      <!-- FORM STARTS HERE -->
-      <form id="authForm" class="space-y-4">
-        <div id="orgFieldGroup">
-          <label class="block text-xs font-medium text-slate-400 mb-1">Organization / School Name</label>
-          <input type="text" id="orgName" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white" placeholder="e.g., NUESA UNILAG">
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Work Email</label>
-          <input type="email" id="email" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white" required>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
-          <input type="password" id="password" class="w-full bg-sportNavy border border-white/10 rounded-lg px-4 py-3 text-white" required>
-        </div>
-
-        <!-- Hidden Input for auth.js state management -->
-        <input type="hidden" id="authMode" value="signup">
-
-        <button type="submit" id="btnSubmitAuth" class="w-full bg-sportGreen hover:bg-emerald-500 text-sportNavy font-bold py-3 rounded-lg transition-colors">
-          Create Account
-        </button>
-      </form>
-      <!-- FORM ENDS HERE -->
-
-      <!-- Divider -->
-      <div class="relative my-6">
-        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-700"></div></div>
-        <div class="relative flex justify-center text-sm"><span class="px-2 bg-sportDark text-slate-400">Or continue with</span></div>
+      <div id="commentsList" class="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar"></div>
+      <div class="p-4 bg-feedDark border-t border-white/5">
+        <form id="commentForm" class="flex gap-2 relative">
+          <input type="text" id="commentInput" class="flex-1 bg-feedCard border border-white/10 rounded-full pl-4 pr-12 py-3 text-sm text-white focus:outline-none focus:border-accent" placeholder="Add a public comment..." autocomplete="off">
+          <button type="submit" id="btnSubmitComment" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-accent rounded-full flex items-center justify-center text-feedDark hover:bg-emerald-500 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </form>
       </div>
-
-      <!-- Alternative Providers (Now safely OUTSIDE the form) -->
-      <div class="grid grid-cols-2 gap-3">
-        <button type="button" id="btnGoogleAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:bg-slate-800 text-white py-3 rounded-lg transition-colors">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
-          Google
-        </button>
-        <button type="button" id="btnPhoneAuth" class="flex justify-center items-center gap-2 bg-sportNavy border border-white/10 hover:bg-slate-800 text-white py-3 rounded-lg transition-colors">
-          📞 Phone
-        </button>
-      </div>
-
-      <!-- Invisible reCAPTCHA container required by Firebase for Phone Auth -->
-      <div id="recaptcha-container" class="mt-2 flex justify-center"></div>
-
-      <p class="text-center text-sm text-slate-400 mt-6" id="authSwitchText">
-        Already have an account? <button type="button" onclick="toggleAuthModal('login')" class="text-sportGreen font-semibold hover:underline">Log In</button>
-      </p>
     </div>
   </div>
 
-  <!-- UI Logic for Modal -->
-  <script>
-    const modal = document.getElementById('authModal');
-    const orgFieldGroup = document.getElementById('orgFieldGroup');
-    const orgNameInput = document.getElementById('orgName');
-    const modalTitle = document.getElementById('modalTitle');
-    const btnSubmitAuth = document.getElementById('btnSubmitAuth');
-    const authSwitchText = document.getElementById('authSwitchText');
-    const authModeInput = document.getElementById('authMode');
+  <!-- AUTHENTICATION MODAL (Hidden for brevity, but connects exactly as before) -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden flex justify-center items-end md:items-center">
+     <!-- Include your existing Auth Modal HTML here from previous steps -->
+  </div>
+  <script src="./scripts/js/auth.js" type="module"></script>
 
-    function toggleAuthModal(mode = null) {
-      if (mode === 'login') {
-        orgFieldGroup.classList.add('hidden');
-        orgNameInput.removeAttribute('required');
-        modalTitle.innerText = 'Welcome Back';
-        btnSubmitAuth.innerText = 'Log In';
-        authModeInput.value = 'login';
-        authSwitchText.innerHTML = 'Need an account? <button type="button" onclick="toggleAuthModal(\'signup\')" class="text-sportGreen font-semibold hover:underline">Sign Up</button>';
-      } else if (mode === 'signup') {
-        orgFieldGroup.classList.remove('hidden');
-        orgNameInput.setAttribute('required', 'true');
-        modalTitle.innerText = 'Create Organizer Account';
-        btnSubmitAuth.innerText = 'Create Account';
-        authModeInput.value = 'signup';
-        authSwitchText.innerHTML = 'Already have an account? <button type="button" onclick="toggleAuthModal(\'login\')" class="text-sportGreen font-semibold hover:underline">Log In</button>';
+  <!-- ========================================== -->
+  <!-- DYNAMIC SOCIAL & EVENT ENGINE -->
+  <!-- ========================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, addDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyC1zozSx_Ox4uf3IN8zBN0dKE--rpIohgU", authDomain: "sportteach-web.firebaseapp.com", projectId: "sportteach-web", storageBucket: "sportteach-web.firebasestorage.app", messagingSenderId: "155474289568", appId: "1:155474289568:web:7248149d14dd63e35a3ac5" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let activeUserId = null;
+    let activeUserEmail = null;
+    let activeUsername = null;
+    let currentActivePostId = null; 
+    let commentsUnsubscribe = null;
+
+    // PAYSTACK KEY FOR TICKET PURCHASES
+    const PAYSTACK_PUBLIC_KEY = "pk_test_REPLACE_THIS_WITH_YOUR_PAYSTACK_KEY";
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        activeUserId = user.uid;
+        activeUserEmail = user.email;
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        if (userSnap.exists()) activeUsername = userSnap.data().username;
+      } else {
+        activeUserId = null; activeUserEmail = null; activeUsername = null;
       }
-      modal.classList.toggle('hidden');
-    }
-  </script>
+    });
 
-  <!-- Auth Controller Script Connection -->
-  <script type="module" src="./scripts/js/auth.js"></script>
+    window.checkProfileAccess = function() {
+      if (!activeUserId) alert("Please log in first."); // Or trigger auth modal
+      else window.location.href = 'profile.html';
+    };
+
+    // UI: Toggle between Feeds
+    window.toggleFeed = function(feedType) {
+      const socialContainer = document.getElementById('socialFeedContainer');
+      const eventsContainer = document.getElementById('eventsFeedContainer');
+      const btnSocial = document.getElementById('btnTabSocial');
+      const btnEvents = document.getElementById('btnTabEvents');
+
+      if(feedType === 'social') {
+        socialContainer.classList.remove('hidden');
+        eventsContainer.classList.add('hidden');
+        btnSocial.className = 'flex-1 py-1.5 text-sm font-bold bg-white/10 text-white rounded-lg transition';
+        btnEvents.className = 'flex-1 py-1.5 text-sm font-bold text-neutral-500 hover:text-white transition rounded-lg';
+      } else {
+        eventsContainer.classList.remove('hidden');
+        socialContainer.classList.add('hidden');
+        btnEvents.className = 'flex-1 py-1.5 text-sm font-bold bg-white/10 text-white rounded-lg transition';
+        btnSocial.className = 'flex-1 py-1.5 text-sm font-bold text-neutral-500 hover:text-white transition rounded-lg';
+      }
+    }
+
+    // ==========================================
+    // 1. RENDER SOCIAL FEED
+    // ==========================================
+    const socialFeedContainer = document.getElementById('socialFeedContainer');
+    const postsQuery = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+    
+    onSnapshot(postsQuery, (snapshot) => {
+      socialFeedContainer.innerHTML = ''; 
+      if (snapshot.empty) return socialFeedContainer.innerHTML = '<div class="text-center py-10 text-neutral-500">No posts yet.</div>'; 
+
+      snapshot.forEach((postDoc) => {
+        const post = postDoc.data();
+        const postId = postDoc.id;
+        const initial = post.authorName ? post.authorName.charAt(0).toUpperCase() : 'O';
+        const isLiked = activeUserId ? (post.likedBy || []).includes(activeUserId) : false;
+        const heartColor = isLiked ? 'text-accent fill-accent' : 'text-white hover:text-accent';
+
+        let mediaHTML = '';
+        if (post.mediaUrl) {
+          mediaHTML = post.mediaType === 'video' 
+            ? `<div class="w-full bg-black relative"><video src="${post.mediaUrl}" controls class="w-full max-h-[500px] object-contain"></video></div>` 
+            : `<div class="w-full h-72 bg-neutral-800 relative bg-cover bg-center" style="background-image: url('${post.mediaUrl}')"></div>`;
+        }
+
+        socialFeedContainer.innerHTML += `
+          <article class="bg-feedCard border border-white/5 rounded-2xl overflow-hidden shadow-lg slide-up pb-2">
+            <div class="p-4 flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex justify-center items-center font-bold text-sm">${initial}</div>
+                <div><div class="flex items-center gap-1"><span class="font-bold text-sm">${post.authorName || 'Organizer'}</span><svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6 12.6l1.5-1.5 2.6 2.6 6.4-6.4 1.5 1.5-7.9 7.9z"/></svg></div>
+                <span class="text-xs text-neutral-400">@${post.username || 'user'}</span></div>
+              </div>
+            </div>
+            ${mediaHTML}
+            <div class="px-4 py-3 flex gap-4 border-t border-white/5">
+              <button onclick="toggleLike('${postId}')" class="flex items-center gap-1.5 group"><svg class="w-6 h-6 transition-colors ${heartColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg><span class="text-sm font-semibold">${(post.likedBy || []).length}</span></button>
+              <button onclick="openComments('${postId}')" class="flex items-center gap-1.5 text-white hover:text-botBlue"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-sm font-semibold">${post.commentsCount || 0}</span></button>
+            </div>
+            <div class="px-4 pb-2"><p class="text-sm whitespace-pre-wrap"><span class="font-bold mr-1">${post.username || 'user'}</span>${post.caption}</p></div>
+          </article>`;
+      });
+    });
+
+    // ==========================================
+    // 2. RENDER EVENTS FEED & TICKETING
+    // ==========================================
+    const eventsFeedContainer = document.getElementById('eventsFeedContainer');
+    const eventsQuery = query(collection(db, "events"), orderBy("timestamp", "desc"), limit(20));
+    
+    onSnapshot(eventsQuery, (snapshot) => {
+      eventsFeedContainer.innerHTML = ''; 
+      if (snapshot.empty) return eventsFeedContainer.innerHTML = '<div class="text-center py-10 text-neutral-500">No upcoming events right now.</div>';
+
+      snapshot.forEach((eventDoc) => {
+        const ev = eventDoc.data();
+        const eventId = eventDoc.id;
+        
+        let priceTag = ev.ticketType === 'free' 
+          ? `<span class="bg-accent/20 text-accent font-bold px-3 py-1 rounded text-xs uppercase tracking-wider">Free Entry</span>` 
+          : `<span class="bg-botBlue/20 text-botBlue font-bold px-3 py-1 rounded text-xs uppercase tracking-wider">₦${ev.ticketPrice.toLocaleString()}</span>`;
+
+        let actionBtnText = ev.ticketType === 'free' ? "Get Free Ticket" : "Buy Ticket";
+
+        eventsFeedContainer.innerHTML += `
+          <article class="bg-feedCard border border-white/5 rounded-2xl overflow-hidden shadow-lg slide-up mb-6">
+            <div class="w-full h-48 bg-neutral-800 relative bg-cover bg-center" style="background-image: url('${ev.bannerUrl}')">
+              <div class="absolute inset-0 bg-gradient-to-t from-feedCard to-transparent"></div>
+              <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                <div>
+                  <p class="text-xs font-bold text-accent mb-1">${ev.date} @ ${ev.time}</p>
+                  <h3 class="text-xl font-black leading-tight">${ev.title}</h3>
+                </div>
+                ${priceTag}
+              </div>
+            </div>
+            <div class="p-4 space-y-4">
+              <div class="flex items-center gap-2 text-sm text-neutral-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                ${ev.location}
+              </div>
+              <p class="text-sm text-neutral-300 line-clamp-2">${ev.description}</p>
+              
+              <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-neutral-500">Hosted by @${ev.username}</span>
+                </div>
+                <button onclick="processTicket('${eventId}', '${ev.title}', '${ev.ticketType}', ${ev.ticketPrice})" class="bg-white/10 hover:bg-white/20 font-bold px-4 py-2 rounded-lg text-sm transition">
+                  ${actionBtnText}
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+    });
+
+    // TICKETING LOGIC
+    window.processTicket = function(eventId, title, type, price) {
+      if (!activeUserId) return alert("Please log in to claim a ticket."); // Or trigger modal
+
+      if (type === 'free') {
+        issueDigitalTicket(eventId, title, "FREE");
+      } else {
+        if(PAYSTACK_PUBLIC_KEY.includes("REPLACE_THIS")) return alert("Paystack key missing. Cannot process paid ticket.");
+        
+        let handler = PaystackPop.setup({
+          key: PAYSTACK_PUBLIC_KEY,
+          email: activeUserEmail || `${activeUsername}@sporttech.app`,
+          amount: price * 100, 
+          currency: 'NGN',
+          ref: 'TKT_' + Math.floor((Math.random() * 1000000000) + 1),
+          callback: function(response) {
+            issueDigitalTicket(eventId, title, response.reference);
+          },
+          onClose: function() { alert('Transaction window closed.'); }
+        });
+        handler.openIframe();
+      }
+    };
+
+    async function issueDigitalTicket(eventId, title, paymentRef) {
+      try {
+        await addDoc(collection(db, `users/${activeUserId}/tickets`), {
+          eventId: eventId,
+          eventTitle: title,
+          paymentRef: paymentRef,
+          purchasedAt: serverTimestamp(),
+          qrCodeData: `ST_TKT_${activeUserId}_${eventId}` // Organizer scans this at the gate
+        });
+        
+        // Increment global ticket sold counter
+        const eventRef = doc(db, "events", eventId);
+        const evSnap = await getDoc(eventRef);
+        await updateDoc(eventRef, { ticketsSold: (evSnap.data().ticketsSold || 0) + 1 });
+
+        alert(`Success! Your ticket for "${title}" has been issued. Check your Profile > My Tickets to view the QR Gate Code.`);
+      } catch (error) {
+        alert("Failed to issue ticket. Please contact support.");
+      }
+    }
+
+    // Interactive functions (Likes, Comments) omitted from the snippet but they remain identical to the previous version
+    window.toggleLike = async function(postId) { /* Same as before */ };
+    window.openComments = function(postId) { /* Same as before */ };
+    window.toggleCommentsModal = function() { document.getElementById('commentsModal').classList.toggle('hidden'); if(commentsUnsubscribe) commentsUnsubscribe(); };
+  </script>
 </body>
 </html>

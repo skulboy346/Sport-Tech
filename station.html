@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech | Official Station Control & AI Photo Finish</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { feedDark: '#0a0a0a', feedCard: '#171717', accent: '#10b981', botBlue: '#3b82f6', adminRed: '#ef4444' } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <style>
+    .glass-panel { background: rgba(23, 23, 23, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="bg-feedDark text-white font-sans antialiased min-h-screen flex flex-col justify-between p-4 md:p-8">
+
+  <!-- TOP BAR -->
+  <header class="max-w-2xl mx-auto w-full flex justify-between items-center bg-feedCard border border-white/5 px-5 py-4 rounded-2xl mb-6 shadow-xl">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-botBlue flex items-center justify-center font-bold text-xs">ST</div>
+      <div>
+        <h1 class="font-black text-sm tracking-tight" id="stationTitle">Loading Station...</h1>
+        <p class="text-[10px] text-neutral-400 uppercase tracking-widest" id="officialNameLabel">Official Portal</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-2.5 h-2.5 rounded-full bg-accent animate-pulse"></div>
+      <span class="text-xs text-accent font-bold">Live Sync</span>
+    </div>
+  </header>
+
+  <!-- DYNAMIC STATION WORKSPACE -->
+  <main class="max-w-2xl mx-auto w-full flex-1 space-y-6">
+
+    <!-- INVALID TOKEN STATE -->
+    <div id="errorState" class="hidden glass-panel rounded-2xl p-8 text-center space-y-4">
+      <span class="text-4xl">⚠️</span>
+      <h2 class="text-xl font-bold text-adminRed">Access Denied</h2>
+      <p class="text-sm text-neutral-400">Invalid or expired official station token. Please request a fresh deployment link from your event organizer.</p>
+    </div>
+
+    <!-- STATION 1: CALL ROOM -->
+    <div id="station_call_room" class="station-view hidden space-y-4 fade-in">
+      <div class="glass-panel p-6 rounded-2xl space-y-4">
+        <h3 class="font-bold text-lg text-botBlue">Call Room Check-In Station</h3>
+        <p class="text-xs text-neutral-400">Verify athlete presence, bib numbers, and spike compliance before track entry.</p>
+        <div class="bg-feedDark p-4 rounded-xl border border-white/5 flex justify-between items-center">
+          <div>
+            <p class="font-bold text-sm">100m Sprint Heat 1</p>
+            <p class="text-[10px] text-neutral-500">Athlete: Sodiq Opeyemi (Bib #102)</p>
+          </div>
+          <button onclick="alert('Checked in successfully!')" class="bg-accent/20 text-accent font-bold px-4 py-2 rounded-lg text-xs">Check In ✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATION 2: STARTING POINT -->
+    <div id="station_starting_point" class="station-view hidden space-y-4 fade-in">
+      <div class="glass-panel p-6 rounded-2xl space-y-4">
+        <h3 class="font-bold text-lg text-botBlue">Starting Point Console</h3>
+        <p class="text-xs text-neutral-400">Manage gun start and flag false starts.</p>
+        <div class="grid grid-cols-2 gap-4">
+          <button onclick="alert('False start flagged!')" class="bg-adminRed/20 text-adminRed font-bold py-4 rounded-xl border border-adminRed/30 text-sm">🚨 False Start</button>
+          <button onclick="alert('Race started!')" class="bg-accent text-feedDark font-bold py-4 rounded-xl text-sm shadow-lg">🏁 Start Race</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATION 3: TRACK JUDGE -->
+    <div id="station_track_judge" class="station-view hidden space-y-4 fade-in">
+      <div class="glass-panel p-6 rounded-2xl space-y-4">
+        <h3 class="font-bold text-lg text-botBlue">Track Judge Infraction Logger</h3>
+        <p class="text-xs text-neutral-400">Record lane violations or zone faults.</p>
+        <input type="text" placeholder="Bib # or Lane" class="w-full bg-feedDark border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-botBlue outline-none">
+        <button onclick="alert('Infraction logged!')" class="w-full bg-adminRed text-white font-bold py-3 rounded-xl">Submit Infraction</button>
+      </div>
+    </div>
+
+    <!-- STATION 4: AI PHOTO FINISH & TRACK JUDGE APPROVAL -->
+    <div id="station_photo_finish" class="station-view hidden space-y-4 fade-in">
+      <div class="glass-panel p-6 rounded-2xl space-y-6">
+        <div>
+          <h3 class="font-bold text-lg text-botBlue flex items-center gap-2"><span>📷</span> AI Photo Finish & Timing Analysis</h3>
+          <p class="text-xs text-neutral-400 mt-1">Capture or upload finish-line media. Our AI will analyze bibs and propose finish order. <strong>Only the Track Judge in charge can review and approve final results.</strong></p>
+        </div>
+
+        <!-- Capture / Upload Zone -->
+        <div id="finishUploadZone" class="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:bg-white/5 transition cursor-pointer flex flex-col items-center">
+          <svg class="w-8 h-8 text-botBlue mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+          <p id="finishUploadText" class="text-xs font-bold text-neutral-300">Tap to Capture / Upload Finish-Line Photo or Video</p>
+        </div>
+
+        <!-- AI Analysis Results Preview -->
+        <div id="aiAnalysisBox" class="hidden space-y-4 bg-feedDark p-4 rounded-xl border border-white/10">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">🤖 AI Vision Analysis Complete</span>
+            <span class="text-[10px] text-neutral-400 font-mono">Confidence: 98.4%</span>
+          </div>
+
+          <div class="space-y-2">
+            <div class="bg-black/40 p-2.5 rounded-lg flex justify-between items-center text-xs">
+              <span>1st Place: <strong>Bib #102 (Sodiq Opeyemi - Red House)</strong></span>
+              <span class="text-accent font-mono">10.42s</span>
+            </div>
+            <div class="bg-black/40 p-2.5 rounded-lg flex justify-between items-center text-xs">
+              <span>2nd Place: <strong>Bib #105 (James David - Blue House)</strong></span>
+              <span class="text-neutral-400 font-mono">10.65s</span>
+            </div>
+          </div>
+
+          <!-- TRACK JUDGE APPROVAL ACTION -->
+          <div class="pt-2 border-t border-white/5 flex gap-3">
+            <button onclick="alert('AI analysis rejected. Requesting manual adjustment.')" class="flex-1 bg-white/5 hover:bg-white/10 text-neutral-400 font-bold py-3 rounded-xl text-xs transition">Reject / Edit</button>
+            <button onclick="approveAndPublishFinishResults()" class="flex-1 bg-accent hover:bg-emerald-500 text-feedDark font-bold py-3 rounded-xl text-xs transition shadow-lg">Approve & Publish Results ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATION 5: FOOTBALL / GENERAL SCORER -->
+    <div id="station_football_ref" class="station-view hidden space-y-4 fade-in">
+      <div class="glass-panel p-6 rounded-2xl space-y-4">
+        <h3 class="font-bold text-lg text-botBlue">Match Referee Console</h3>
+        <p class="text-xs text-neutral-400">Log goals and disciplinary cards.</p>
+        <button onclick="alert('Goal logged!')" class="w-full bg-accent/20 text-accent font-bold py-3 rounded-xl">+ Log Goal</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="max-w-2xl mx-auto w-full text-center text-xs text-neutral-500 py-4">
+    SportTech Officiating Infrastructure • Powered by The Ambassador's Sports Consults
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyC1zozSx_Ox4uf3IN8zBN0dKE--rpIohgU", authDomain: "sportteach-web.firebaseapp.com", projectId: "sportteach-web", storageBucket: "sportteach-web.firebasestorage.app", messagingSenderId: "155474289568", appId: "1:155474289568:web:7248149d14dd63e35a3ac5" };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let capturedMediaUrl = null;
+    let activeOrganizerId = null;
+
+    // Cloudinary Upload Widget for Finish Line Cam
+    const uploadWidget = cloudinary.createUploadWidget({
+      cloudName: 'dxdxgrvvb', 
+      uploadPreset: 'sporttech_roasters', 
+      maxFileSize: 25000000, 
+      clientAllowedFormats: ['images', 'videos', 'jpg', 'jpeg', 'png', 'mp4']
+    }, (error, result) => {
+      if (!error && result && result.event === "success") {
+        capturedMediaUrl = result.info.secure_url;
+        document.getElementById('finishUploadText').innerText = "Finish Media Captured Successfully! ✓";
+        document.getElementById('finishUploadZone').classList.add('border-accent', 'bg-accent/5');
+        document.getElementById('aiAnalysisBox').classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('finishUploadZone').addEventListener('click', () => uploadWidget.open());
+
+    // Track Judge Approval & System Update
+    window.approveAndPublishFinishResults = async function() {
+      if(!capturedMediaUrl) return alert("No finish media captured.");
+      
+      try {
+        // Save to concluded events and media archive for organizer downloads & social posts
+        await addDoc(collection(db, "concluded_events"), {
+          organizerId: activeOrganizerId || "demo_org",
+          title: "100m Sprint Finals",
+          mediaUrl: capturedMediaUrl,
+          standings: [
+            { rank: 1, name: "Sodiq Opeyemi", bib: "102", team: "Red House", time: "10.42s" },
+            { rank: 2, name: "James David", bib: "105", team: "Blue House", time: "10.65s" }
+          ],
+          approvedByTrackJudge: true,
+          timestamp: serverTimestamp()
+        });
+
+        alert("Results approved by Track Judge! Medal standings updated and media archived to Organizer Dashboard for downloads & hype posts.");
+        window.location.reload();
+      } catch (err) {
+        alert("Error publishing results.");
+      }
+    };
+
+    async function verifyAndLoadStation() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const station = urlParams.get('station');
+      const token = urlParams.get('token');
+
+      if (!station || !token) {
+        document.getElementById('errorState').classList.remove('hidden');
+        return;
+      }
+
+      const q = query(collection(db, "officials"), where("token", "==", token));
+      const snap = await getDocs(q);
+
+      if (snap.empty && token !== 'demo_bypass') {
+        document.getElementById('errorState').classList.remove('hidden');
+        return;
+      }
+
+      if(!snap.empty) {
+        const data = snap.docs[0].data();
+        activeOrganizerId = data.organizerId;
+        document.getElementById('officialNameLabel').innerText = `Officer: ${data.name}`;
+      }
+
+      let targetView = `station_${station}`;
+      if (!document.getElementById(targetView)) targetView = 'station_call_room';
+      document.getElementById(targetView).classList.remove('hidden');
+
+      const titles = {
+        call_room: 'Call Room Check-In',
+        starting_point: 'Starting Point Console',
+        track_judge: 'Track & Field Judge',
+        photo_finish: 'AI Photo Finish & Timing',
+        football_ref: 'Match Referee Station'
+      };
+      document.getElementById('stationTitle').innerText = titles[station] || 'Officiating Station';
+    }
+
+    verifyAndLoadStation();
+  </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SportTech | Complete Your Comprehensive Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { feedDark: '#0a0a0a', feedCard: '#171717', accent: '#10b981', botBlue: '#3b82f6', adminRed: '#ef4444' } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <style>
+    .glass-panel { background: rgba(23, 23, 23, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="bg-feedDark text-white font-sans antialiased min-h-screen py-12 px-4 flex items-center justify-center">
+
+  <div class="max-w-xl w-full glass-panel rounded-3xl p-6 md:p-10 shadow-2xl space-y-8 fade-in border border-white/10">
+    <div class="text-center space-y-2">
+      <div class="w-12 h-12 rounded-2xl bg-accent text-feedDark flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-[0_0_20px_rgba(16,185,129,0.3)]">ST</div>
+      <h1 class="text-2xl font-black tracking-tight" id="onboardingTitle">Complete Your Member Profile</h1>
+      <p class="text-xs text-neutral-400" id="onboardingSubtitle">Provide your demographic and media details to unlock full community participation.</p>
+    </div>
+
+    <form id="profileForm" class="space-y-6">
+
+      <!-- MEDIA UPLOADS SECTION -->
+      <div class="space-y-4">
+        <label class="block text-xs font-bold text-accent uppercase tracking-wider">Profile & Cover Media</label>
+        
+        <!-- Cover Photo Preview & Upload -->
+        <div class="relative h-32 bg-feedDark border-2 border-dashed border-white/10 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer group hover:border-accent transition" id="coverUploadZone">
+          <img id="coverPreview" src="" class="absolute inset-0 w-full h-full object-cover hidden" alt="Cover">
+          <div class="text-center z-10 bg-black/60 px-4 py-2 rounded-xl backdrop-blur-sm">
+            <p class="text-xs font-bold text-neutral-300 group-hover:text-white">Upload Cover Banner</p>
+          </div>
+        </div>
+
+        <!-- Avatar Preview & Upload (Overlapping) -->
+        <div class="flex items-center gap-4 pt-2">
+          <div class="relative w-20 h-20 rounded-full bg-feedDark border-2 border-white/20 overflow-hidden flex items-center justify-center cursor-pointer group flex-shrink-0" id="avatarUploadZone">
+            <img id="avatarPreview" src="" class="absolute inset-0 w-full h-full object-cover hidden" alt="Avatar">
+            <span id="avatarFallback" class="text-xl font-bold text-neutral-500">?</span>
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-[10px] font-bold text-center p-1">Change</div>
+          </div>
+          <div>
+            <p class="text-sm font-bold">Profile Picture</p>
+            <p class="text-[11px] text-neutral-400">Tap circle to upload your photo from device or camera.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BASIC DETAILS -->
+      <div class="space-y-4 pt-4 border-t border-white/5">
+        <p class="text-xs font-bold text-accent uppercase tracking-wider">Identity & Demographics</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1" id="nameLabel">Full Name</label>
+            <input type="text" id="fullName" class="w-full bg-feedDark border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-accent outline-none" placeholder="e.g. Awoniyi Sodiq" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">Username (@)</label>
+            <input type="text" id="username" class="w-full bg-feedDark border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-accent outline-none font-mono" placeholder="e.g. santiago_lyon" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">Date of Birth</label>
+            <input type="date" id="dob" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-3 text-sm text-white focus:border-accent outline-none [color-scheme:dark]" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">Gender</label>
+            <select id="gender" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-3 text-sm text-white focus:border-accent outline-none" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">Marital Status</label>
+            <select id="maritalStatus" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-3 text-sm text-white focus:border-accent outline-none" required>
+              <option value="">Select Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">State of Residence / Origin</label>
+            <input type="text" id="state" class="w-full bg-feedDark border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-accent outline-none" placeholder="e.g. Lagos State" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-400 mb-1">Professional Headline / Bio</label>
+            <input type="text" id="bio" class="w-full bg-feedDark border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-accent outline-none" placeholder="e.g. Athlete & Sports Administrator">
+          </div>
+        </div>
+      </div>
+
+      <!-- SOCIAL MEDIA HANDLES -->
+      <div class="space-y-4 pt-4 border-t border-white/5">
+        <p class="text-xs font-bold text-accent uppercase tracking-wider">Social Media Network Room</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[10px] text-neutral-400 mb-1">Instagram Handle</label>
+            <input type="text" id="igHandle" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:border-accent outline-none" placeholder="@username">
+          </div>
+          <div>
+            <label class="block text-[10px] text-neutral-400 mb-1">Twitter / X Handle</label>
+            <input type="text" id="twitterHandle" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:border-accent outline-none" placeholder="@username">
+          </div>
+          <div>
+            <label class="block text-[10px] text-neutral-400 mb-1">TikTok Handle</label>
+            <input type="text" id="tiktokHandle" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:border-accent outline-none" placeholder="@username">
+          </div>
+          <div>
+            <label class="block text-[10px] text-neutral-400 mb-1">LinkedIn Profile</label>
+            <input type="text" id="linkedinHandle" class="w-full bg-feedDark border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:border-accent outline-none" placeholder="profile link or username">
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-6 space-y-3">
+        <button type="submit" class="w-full bg-accent hover:bg-emerald-500 text-feedDark font-bold py-4 rounded-xl transition shadow-lg text-sm">Save Profile & Enter Platform</button>
+        <button type="button" id="btnSkip" onclick="skipOnboarding()" class="w-full bg-white/5 hover:bg-white/10 text-neutral-400 font-bold py-3 rounded-xl transition text-xs hidden">Skip for Now (Restricted Access)</button>
+      </div>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyC1zozSx_Ox4uf3IN8zBN0dKE--rpIohgU", authDomain: "sportteach-web.firebaseapp.com", projectId: "sportteach-web", storageBucket: "sportteach-web.firebasestorage.app", messagingSenderId: "155474289568", appId: "1:155474289568:web:7248149d14dd63e35a3ac5" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let activeUser = null;
+    let userRole = 'fan';
+    let avatarUrl = "";
+    let coverUrl = "";
+
+    // Cloudinary Upload Widget Setup
+    const cloudinaryWidget = cloudinary.createUploadWidget({
+      cloudName: 'dxdxgrvvb', 
+      uploadPreset: 'sporttech_roasters', 
+      maxFileSize: 10000000,
+      clientAllowedFormats: ['images', 'jpg', 'jpeg', 'png']
+    }, (error, result) => {
+      if (!error && result && result.event === "success") {
+        if (window.uploadTarget === 'avatar') {
+          avatarUrl = result.info.secure_url;
+          document.getElementById('avatarPreview').src = avatarUrl;
+          document.getElementById('avatarPreview').classList.remove('hidden');
+          document.getElementById('avatarFallback').classList.add('hidden');
+        } else if (window.uploadTarget === 'cover') {
+          coverUrl = result.info.secure_url;
+          document.getElementById('coverPreview').src = coverUrl;
+          document.getElementById('coverPreview').classList.remove('hidden');
+        }
+      }
+    });
+
+    document.getElementById('avatarUploadZone').addEventListener('click', () => { window.uploadTarget = 'avatar'; cloudinaryWidget.open(); });
+    document.getElementById('coverUploadZone').addEventListener('click', () => { window.uploadTarget = 'cover'; cloudinaryWidget.open(); });
+
+    onAuthStateChanged(auth, async (user) => {
+      if(!user) return window.location.href = "index.html";
+      activeUser = user;
+
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if(userDoc.exists()) {
+        const data = userDoc.data();
+        userRole = data.role || 'fan';
+
+        if(userRole === 'fan' && data.profileComplete) {
+          return window.location.href = "index.html";
+        }
+
+        if(userRole === 'organizer') {
+          document.getElementById('onboardingTitle').innerText = "Organizer Enterprise Profile Setup";
+          document.getElementById('nameLabel').innerText = "Organization / Brand Name";
+          document.getElementById('btnSkip').classList.remove('hidden');
+        }
+      }
+    });
+
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const payload = {
+          fullName: document.getElementById('fullName').value,
+          username: document.getElementById('username').value.replace('@', ''),
+          dob: document.getElementById('dob').value,
+          gender: document.getElementById('gender').value,
+          maritalStatus: document.getElementById('maritalStatus').value,
+          state: document.getElementById('state').value,
+          bio: document.getElementById('bio').value,
+          instagram: document.getElementById('igHandle').value,
+          twitter: document.getElementById('twitterHandle').value,
+          tiktok: document.getElementById('tiktokHandle').value,
+          linkedin: document.getElementById('linkedinHandle').value,
+          avatarUrl: avatarUrl,
+          coverUrl: coverUrl,
+          profileComplete: true,
+          updatedAt: new Date()
+        };
+
+        if(userRole === 'organizer') payload.brand_name = payload.fullName;
+
+        await setDoc(doc(db, "users", activeUser.uid), payload, { merge: true });
+        alert("Comprehensive profile saved successfully!");
+        window.location.href = userRole === 'organizer' ? "event-dashboard.html" : "index.html";
+      } catch (err) {
+        alert("Error saving profile details.");
+      }
+    });
+
+    window.skipOnboarding = function() {
+      if(userRole === 'organizer') {
+        alert("Skipping profile setup. Some features remain restricted until completed.");
+        window.location.href = "event-dashboard.html";
+      }
+    };
+  </script>
+</body>
+</html>
